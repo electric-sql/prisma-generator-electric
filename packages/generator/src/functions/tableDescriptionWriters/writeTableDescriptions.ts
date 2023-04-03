@@ -134,7 +134,12 @@ export function writeTableDescriptionType(
   model: ExtendedDMMFModel,
   fileWriter: CreateFileOptions,
 ) {
+  const capitalizeFirstLetter = (string: string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   const modelName = model.name;
+  const capitalizedModelName = capitalizeFirstLetter(modelName);
   let includeType = `Omit<Prisma.${modelName}Include, '_count'>,`;
   if (model.relationFields.length === 0) {
     // if the model has no relations, it won't support 'include' arguments
@@ -153,6 +158,6 @@ export function writeTableDescriptionType(
     .writeLine(`  ${includeType}`)
     .writeLine(`  Prisma.${modelName}FindFirstArgs['orderBy'],`)
     .writeLine(`  Prisma.${capitalizedModelName}ScalarFieldEnum,`)
-    .writeLine(`  'UserGetPayload'`)
+    .writeLine(`  '${modelName}GetPayload'`)
     .writeLine('>,');
 }
