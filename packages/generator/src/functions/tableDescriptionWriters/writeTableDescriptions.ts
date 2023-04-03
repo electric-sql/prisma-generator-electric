@@ -134,12 +134,7 @@ export function writeTableDescriptionType(
   model: ExtendedDMMFModel,
   fileWriter: CreateFileOptions,
 ) {
-  const capitalizeFirstLetter = (string: string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   const modelName = model.name;
-  const capitalizedModelName = capitalizeFirstLetter(modelName);
   let includeType = `Omit<Prisma.${modelName}Include, '_count'>,`;
   if (model.relationFields.length === 0) {
     // if the model has no relations, it won't support 'include' arguments
@@ -150,13 +145,13 @@ export function writeTableDescriptionType(
     .write('TableDescription<')
     .newLine()
     .writeLine(`  z.infer<typeof ${modelName}CreateInputSchema>,`)
-    .writeLine(`  Prisma.${capitalizedModelName}CreateArgs['data'],`)
-    .writeLine(`  Prisma.${capitalizedModelName}UpdateArgs['data'],`)
-    .writeLine(`  Prisma.${capitalizedModelName}FindFirstArgs['select'],`)
-    .writeLine(`  Prisma.${capitalizedModelName}FindFirstArgs['where'],`)
-    .writeLine(`  Prisma.${capitalizedModelName}FindUniqueArgs['where'],`)
+    .writeLine(`  Prisma.${modelName}CreateArgs['data'],`)
+    .writeLine(`  Prisma.${modelName}UpdateArgs['data'],`)
+    .writeLine(`  Prisma.${modelName}FindFirstArgs['select'],`)
+    .writeLine(`  Prisma.${modelName}FindFirstArgs['where'],`)
+    .writeLine(`  Prisma.${modelName}FindUniqueArgs['where'],`)
     .writeLine(`  ${includeType}`)
-    .writeLine(`  Prisma.${capitalizedModelName}FindFirstArgs['orderBy'],`)
+    .writeLine(`  Prisma.${modelName}FindFirstArgs['orderBy'],`)
     .writeLine(`  Prisma.${capitalizedModelName}ScalarFieldEnum,`)
     .writeLine(`  'UserGetPayload'`)
     .writeLine('>,');
