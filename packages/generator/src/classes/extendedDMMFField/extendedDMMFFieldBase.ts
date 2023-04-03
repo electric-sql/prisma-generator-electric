@@ -29,6 +29,7 @@ export class ExtendedDMMFFieldBase
   readonly isUpdatedAt: DMMF.Field['isUpdatedAt'];
   readonly hasDefaultValue: DMMF.Field['hasDefaultValue'];
   readonly default?: DMMF.Field['default'];
+  readonly relationFromFields?: DMMF.Field['relationFromFields'];
   readonly relationToFields?: DMMF.Field['relationToFields'];
   readonly relationOnDelete?: DMMF.Field['relationOnDelete'];
   readonly relationName?: DMMF.Field['relationName'];
@@ -64,6 +65,7 @@ export class ExtendedDMMFFieldBase
     this.isUpdatedAt = field.isUpdatedAt;
     this.hasDefaultValue = field.hasDefaultValue;
     this.default = field.default;
+    this.relationFromFields = field.relationFromFields;
     this.relationToFields = field.relationToFields;
     this.relationOnDelete = field.relationOnDelete;
     this.relationName = field.relationName;
