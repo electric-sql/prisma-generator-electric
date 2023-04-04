@@ -26,4 +26,6 @@ export const writeSingleFileImportStatements: WriteStatements = (
       writer.writeLine(statement);
     });
   }
+
+  writeImport(`{ TableDescription, DBDescription, Relation }`, 'electric-sql/client/model');
 };
