@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "turbo run test",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "prepare": "cd packages/generator && npm build"
   },
   "keywords": [],
   "author": "",
