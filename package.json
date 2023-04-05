@@ -6,7 +6,7 @@
   "scripts": {
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "prepare": "cd packages/generator && npm run build"
+    "prepare": "cd packages/generator && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
