@@ -66,7 +66,9 @@ export function writeTableSchemas(dmmf: ExtendedDMMF, fileWriter: CreateFileOpti
     })
     .blankLine();
 
-  writer.writeLine('export const dbSchema = new DbSchema(tableSchemas)');
+  writer
+    .writeLine('export const dbSchema = new DbSchema(tableSchemas)')
+    .writeLine('export type Electric = ElectricClient<typeof dbSchema>');
 }
 
 export function writeFieldNamesArray(
