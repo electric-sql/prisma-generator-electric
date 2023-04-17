@@ -20,7 +20,7 @@ import { CreateFileOptions, ExtendedDMMF, ExtendedDMMFModel } from '../../classe
  *
  */
 
-export function writeTableDescriptions(dmmf: ExtendedDMMF, fileWriter: CreateFileOptions) {
+export function writeTableSchemas(dmmf: ExtendedDMMF, fileWriter: CreateFileOptions) {
   const writer = fileWriter.writer;
 
   writer.blankLine()
@@ -40,7 +40,7 @@ export function writeTableDescriptions(dmmf: ExtendedDMMF, fileWriter: CreateFil
 
   // Make an object describing all tables
   writer
-    .write(`export const tableDescriptions = `)
+    .write(`export const tableSchemas = `)
     .inlineBlock(() => {
       dmmf.datamodel.models.forEach((model: ExtendedDMMFModel) => {
         const modelName = model.name;
@@ -66,7 +66,7 @@ export function writeTableDescriptions(dmmf: ExtendedDMMF, fileWriter: CreateFil
     })
     .blankLine();
 
-  writer.writeLine('export const dbDescription = new DBDescription(tableDescriptions)');
+  writer.writeLine('export const dbSchema = new DbSchema(tableSchemas)');
 }
 
 export function writeFieldNamesArray(
@@ -145,7 +145,7 @@ export function writeTableDescriptionType(
   }
 
   fileWriter.writer
-    .write('TableDescription<')
+    .write('TableSchema<')
     .newLine()
     .writeLine(`  z.infer<typeof ${modelName}CreateInputSchema>,`)
     .writeLine(`  Prisma.${modelName}CreateArgs['data'],`)
