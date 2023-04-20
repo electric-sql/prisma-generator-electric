@@ -10,7 +10,7 @@ import {
   writeSingleFileArgTypeStatements,
 } from './functions';
 import { CreateOptions } from './types';
-import { writeTableDescriptions } from './functions/tableDescriptionWriters/writeTableDescriptions';
+import { writeTableSchemas } from './functions/tableDescriptionWriters/writeTableSchemas';
 
 export const generateSingleFile = ({ dmmf, path }: CreateOptions) => {
   new FileWriter().createFile(`${path}/index.ts`, (fileWriter) => {
@@ -22,6 +22,6 @@ export const generateSingleFile = ({ dmmf, path }: CreateOptions) => {
     writeSingleFileIncludeSelectStatements(dmmf, fileWriter);
     writeSingleFileInputTypeStatements(dmmf, fileWriter);
     writeSingleFileArgTypeStatements(dmmf, fileWriter);
-    writeTableDescriptions(dmmf, fileWriter);
+    writeTableSchemas(dmmf, fileWriter);
   });
 };

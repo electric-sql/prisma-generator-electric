@@ -20,29 +20,27 @@ import { CreateFileOptions, ExtendedDMMF, ExtendedDMMFModel } from '../../classe
  *
  */
 
-export function writeTableDescriptions(dmmf: ExtendedDMMF, fileWriter: CreateFileOptions) {
+export function writeTableSchemas(dmmf: ExtendedDMMF, fileWriter: CreateFileOptions) {
   const writer = fileWriter.writer;
 
-  // Extend the HKT module with the payload types
-  writer
-    .blankLine()
-    .write("declare module 'fp-ts/HKT' ")
-    .inlineBlock(() => {
-      writer
-        .write('interface URItoKind<A> ')
-        .inlineBlock(() => {
-          dmmf.datamodel.models.forEach((model: ExtendedDMMFModel) => {
-            const modelName = model.name;
-            writer
-              .writeLine(`${modelName}GetPayload: Prisma.${modelName}GetPayload<A>`)
-          })
-        })
-    })
-    .blankLine();
+  writer.blankLine()
+
+  // Create a HKT interface for every table's GetPayload type
+  dmmf.datamodel.models.forEach((model: ExtendedDMMFModel) => {
+    const modelName = model.name;
+    writer
+      .write(`interface ${modelName}GetPayload extends HKT `)
+      .inlineBlock(() => {
+        writer
+          .writeLine(`readonly _A?: boolean | null | undefined | Prisma.${modelName}Args`)
+          .writeLine(`readonly type: Prisma.${modelName}GetPayload<this['_A']>`)
+      })
+      .blankLine();
+  });
 
   // Make an object describing all tables
   writer
-    .write(`export const tableDescriptions = `)
+    .write(`export const tableSchemas = `)
     .inlineBlock(() => {
       dmmf.datamodel.models.forEach((model: ExtendedDMMFModel) => {
         const modelName = model.name;
@@ -68,7 +66,9 @@ export function writeTableDescriptions(dmmf: ExtendedDMMF, fileWriter: CreateFil
     })
     .blankLine();
 
-  writer.writeLine('export const dbDescription = new DBDescription(tableDescriptions)');
+  writer
+    .writeLine('export const dbSchema = new DbSchema(tableSchemas)')
+    .writeLine('export type Electric = ElectricClient<typeof dbSchema>');
 }
 
 export function writeFieldNamesArray(
@@ -147,7 +147,7 @@ export function writeTableDescriptionType(
   }
 
   fileWriter.writer
-    .write('TableDescription<')
+    .write('TableSchema<')
     .newLine()
     .writeLine(`  z.infer<typeof ${modelName}CreateInputSchema>,`)
     .writeLine(`  Prisma.${modelName}CreateArgs['data'],`)
@@ -158,6 +158,6 @@ export function writeTableDescriptionType(
     .writeLine(`  ${includeType}`)
     .writeLine(`  Prisma.${modelName}FindFirstArgs['orderBy'],`)
     .writeLine(`  Prisma.${capitalizedModelName}ScalarFieldEnum,`)
-    .writeLine(`  '${modelName}GetPayload'`)
+    .writeLine(`  ${modelName}GetPayload`)
     .writeLine('>,');
 }
